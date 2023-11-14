@@ -6,6 +6,8 @@ public class BlockGame {
 	
 	static class MyFrame extends JFrame {
 		
+		int a;
+		
 		//constant
 		static int BALL_WIDTH = 20;
 		static int BALL_HEIGHT = 20;
