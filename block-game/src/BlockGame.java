@@ -8,6 +8,7 @@ public class BlockGame {
 		
 		int a;
 		int b;
+		int c;
 		
 		//constant
 		static int BALL_WIDTH = 20;
