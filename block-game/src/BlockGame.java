@@ -94,8 +94,9 @@ public class BlockGame extends JFrame {
             ballSpeedY = -ballSpeedY;
         }
 
-        if (ballY >= HEIGHT - BALL_SIZE - PADDLE_HEIGHT && ballX >= paddleX && ballX <= paddleX + PADDLE_WIDTH) {
-            ballSpeedY = -ballSpeedY;
+        if (ballY >= HEIGHT - BALL_SIZE - PADDLE_HEIGHT && ballX + BALL_SIZE >= paddleX && ballX <= paddleX + PADDLE_WIDTH) {
+            ballSpeedY = -Math.abs(ballSpeedY); // 볼이 바에 닿았을 때만 반전, 음수로 설정하여 양수로 변환
+            ballY = HEIGHT - BALL_SIZE - PADDLE_HEIGHT; // 볼이 바에 닿은 후 미끄러지지 않도록 위치를 조정
         }
 
         for (int i = 0; i < NUM_BRICKS; i++) {
