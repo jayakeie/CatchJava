@@ -18,7 +18,7 @@ public class BlockGame extends JFrame {
 
     private int paddleX = WIDTH / 2 - PADDLE_WIDTH / 2;
     private int ballX = WIDTH / 2 - BALL_SIZE / 2;
-    private int ballY = HEIGHT - PADDLE_HEIGHT - BALL_SIZE;
+    private int ballY = HEIGHT / 2 - BALL_SIZE / 2;
     private int ballSpeedX = 3;
     private int ballSpeedY = -3;
 
@@ -94,9 +94,14 @@ public class BlockGame extends JFrame {
             ballSpeedY = -ballSpeedY;
         }
 
-        if (ballY >= HEIGHT - BALL_SIZE - PADDLE_HEIGHT && ballX + BALL_SIZE >= paddleX && ballX <= paddleX + PADDLE_WIDTH) {
-            ballSpeedY = -Math.abs(ballSpeedY); // 볼이 바에 닿았을 때만 반전, 음수로 설정하여 양수로 변환
-            ballY = HEIGHT - BALL_SIZE - PADDLE_HEIGHT; // 볼이 바에 닿은 후 미끄러지지 않도록 위치를 조정
+        if (ballY >= HEIGHT) {
+            // 화면 아래로 벗어난 경우, 공의 위치를 화면 정중앙으로 재설정
+            ballX = WIDTH / 2 - BALL_SIZE / 2;
+            ballY = HEIGHT / 2 - BALL_SIZE / 2;
+        }
+
+        if (ballY >= HEIGHT - BALL_SIZE - PADDLE_HEIGHT && ballX >= paddleX && ballX <= paddleX + PADDLE_WIDTH) {
+            ballSpeedY = -ballSpeedY;
         }
 
         for (int i = 0; i < NUM_BRICKS; i++) {
