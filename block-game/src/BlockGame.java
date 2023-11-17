@@ -6,9 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class BlockGame extends JFrame {
+	
 	// 변수 선언 구간
-	int a;
-
     private static final int WIDTH = 400;
     private static final int HEIGHT = 600;
     private static final int PADDLE_WIDTH = 60;
