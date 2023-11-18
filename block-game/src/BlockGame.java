@@ -6,8 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class BlockGame extends JFrame {
-	
-	// 변수 선언 구간
+
     private static final int WIDTH = 400;
     private static final int HEIGHT = 600;
     private static final int PADDLE_WIDTH = 60;
@@ -28,6 +27,9 @@ public class BlockGame extends JFrame {
 
     private boolean[] bricks;
 
+    private static final int MAX_BALLS = 3;
+    private int remainingBalls = MAX_BALLS;
+
     public BlockGame() {
         setTitle("Block Breaker Game");
         setSize(WIDTH, HEIGHT);
@@ -37,26 +39,27 @@ public class BlockGame extends JFrame {
 
         addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+            }
 
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-					System.out.println("Pressed Left Key");
+                    System.out.println("Pressed Left Key");
                     leftKeyPressed = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					System.out.println("Pressed Right Key");
+                    System.out.println("Pressed Right Key");
                     rightKeyPressed = true;
                 }
             }
-            
+
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-					System.out.println("Released Left Key");
+                    System.out.println("Released Left Key");
                     leftKeyPressed = false;
                 } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					System.out.println("Released Right Key");
+                    System.out.println("Released Right Key");
                     rightKeyPressed = false;
                 }
             }
@@ -96,20 +99,27 @@ public class BlockGame extends JFrame {
         }
 
         if (ballY >= HEIGHT) {
-            // 화면 아래로 벗어난 경우, 공의 위치를 화면 정중앙으로 재설정
-            ballX = WIDTH / 2 - BALL_SIZE / 2;
-            ballY = HEIGHT / 2 - BALL_SIZE / 2;
+            remainingBalls--; // 볼이 아래로 떨어져서 플레이 횟수 감소
+            if (remainingBalls > 0) {
+                // 남은 플레이 횟수가 있으면 게임을 초기화하고 다시 시작
+                ballX = WIDTH / 2 - BALL_SIZE / 2;
+                ballY = HEIGHT / 2 - BALL_SIZE / 2;
+                ballSpeedX = 3;
+                ballSpeedY = -3;
+            } else {
+                // 남은 플레이 횟수가 없으면 게임 종료
+                JOptionPane.showMessageDialog(this, "Game Over");
+                System.exit(0);
+            }
         }
 
-        //볼이 바에 닿을 때만 반전되도록 수정
         if (ballY >= HEIGHT - BALL_SIZE - PADDLE_HEIGHT && ballX + BALL_SIZE >= paddleX && ballX <= paddleX + PADDLE_WIDTH) {
-            // Math.abs(ballSpeedY)를 사용하여 부호가 어떤 상태든 양수로 변환
-            ballSpeedY = -Math.abs(ballSpeedY); // 볼이 바에 닿았을 때만 반전, 음수로 설정하여 양수로 변환
-            ballY = HEIGHT - BALL_SIZE - PADDLE_HEIGHT; // 볼이 바에 닿은 후 미끄러지지 않도록 위치를 조정
+            ballSpeedY = -Math.abs(ballSpeedY);
+            ballY = HEIGHT - BALL_SIZE - PADDLE_HEIGHT;
         }
 
         for (int i = 0; i < NUM_BRICKS; i++) {
-            if (bricks[i] && ballX >= i * BRICK_WIDTH && ballX <= (i + 1) * BRICK_WIDTH && ballY >= 0 && ballY <= BRICK_HEIGHT) {
+        	if (bricks[i] && ballX + BALL_SIZE >= i * BRICK_WIDTH && ballX <= (i + 1) * BRICK_WIDTH && ballY + BALL_SIZE >= 0 && ballY <= BRICK_HEIGHT) {
                 ballSpeedY = -ballSpeedY;
                 bricks[i] = false;
             }
@@ -120,18 +130,19 @@ public class BlockGame extends JFrame {
     public void paint(Graphics g) {
         super.paint(g);
 
-        // Draw paddle
         g.fillRect(paddleX, HEIGHT - PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT);
-
-        // Draw ball
         g.fillOval(ballX, ballY, BALL_SIZE, BALL_SIZE);
 
-        // Draw bricks
         for (int i = 0; i < NUM_BRICKS; i++) {
             if (bricks[i]) {
+                // Draw bricks
                 g.fillRect(i * BRICK_WIDTH, 0, BRICK_WIDTH, BRICK_HEIGHT);
             }
         }
+
+        // Display remaining balls
+        g.setColor(Color.RED);
+        g.drawString("Balls: " + remainingBalls, 10, 20);
     }
 
     public static void main(String[] args) {
