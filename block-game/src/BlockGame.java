@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 
 public class BlockGame extends JFrame {
 
+	// 수정 확인을 위한 주석
 	//변수 선언 구간
     private static final int WIDTH = 400;
     private static final int HEIGHT = 600;
