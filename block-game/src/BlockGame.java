@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 
 public class BlockGame extends JFrame {
 
+	//변수 선언 구간
     private static final int WIDTH = 400;
     private static final int HEIGHT = 600;
     private static final int PADDLE_WIDTH = 60;
@@ -45,21 +46,17 @@ public class BlockGame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    System.out.println("Pressed Left Key");
                     leftKeyPressed = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    System.out.println("Pressed Right Key");
-                    rightKeyPressed = true;
+                	rightKeyPressed = true;
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    System.out.println("Released Left Key");
                     leftKeyPressed = false;
                 } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    System.out.println("Released Right Key");
                     rightKeyPressed = false;
                 }
             }
