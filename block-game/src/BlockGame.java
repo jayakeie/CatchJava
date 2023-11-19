@@ -16,7 +16,10 @@ public class BlockGame extends JFrame {
     private static final int BALL_SIZE = 20;
     private static final int BRICK_WIDTH = 50;
     private static final int BRICK_HEIGHT = 20;
-    private static final int NUM_BRICKS = 40;
+    private static final int BRICKS_ROW = 7;
+    private static final int BRICKS_COL = 5;
+    private static final int NUM_BRICKS = 35;
+    static int BLOCK_GAP = 5; 
 
     private int paddleX = WIDTH / 2 - PADDLE_WIDTH / 2;
     private int ballX = WIDTH / 2 - BALL_SIZE / 2;
@@ -136,18 +139,23 @@ public class BlockGame extends JFrame {
         g.fillRect(paddleX, HEIGHT - PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT);
         g.fillOval(ballX, ballY, BALL_SIZE, BALL_SIZE);
 
-        for (int i = 0; i < NUM_BRICKS; i++) {
-            if (bricks[i]) {
-                // Draw bricks
-                g.fillRect(i * BRICK_WIDTH, 0, BRICK_WIDTH, BRICK_HEIGHT);
-            }
+        for (int i = 0; i < BRICKS_COL; i++) {
+        	for (int j=0; j< BRICKS_ROW; j++) {
+        		int brickIndex = i * BRICKS_ROW + j;  // 1차원 배열을 2차원 배열로
+        		if (bricks[brickIndex]) {
+                    // Draw bricks
+        			int brickX = j * (BRICK_WIDTH + BLOCK_GAP) + 10;
+        			int brickY = i * (BRICK_HEIGHT + BLOCK_GAP) + 50;  // 50 블록이 시작하는 Y좌표
+        			g.fillRect(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT);
+        		}	
+        	}
         }
 
         // Display remaining balls
         g.setColor(Color.RED);
         g.drawString("Balls: " + remainingBalls, 10, 20);
     }
-
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
