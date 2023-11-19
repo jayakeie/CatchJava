@@ -110,10 +110,11 @@ public class BlockGame extends JFrame {
                 System.exit(0);
             }
         }
-
+        //볼이 바에 닿을 때만 반전되도록 수정
         if (ballY >= HEIGHT - BALL_SIZE - PADDLE_HEIGHT && ballX + BALL_SIZE >= paddleX && ballX <= paddleX + PADDLE_WIDTH) {
-            ballSpeedY = -Math.abs(ballSpeedY);
-            ballY = HEIGHT - BALL_SIZE - PADDLE_HEIGHT;
+            // Math.abs(ballSpeedY)를 사용하여 부호가 어떤 상태든 양수로 변환
+        	ballSpeedY = -Math.abs(ballSpeedY); // 볼이 바에 닿았을 때만 반전, 음수로 설정하여 양수로 변환
+            ballY = HEIGHT - BALL_SIZE - PADDLE_HEIGHT; // 볼이 바에 닿은 후 미끄러지지 않도록 위치를 조정
         }
 
         for (int i = 0; i < NUM_BRICKS; i++) {
