@@ -96,9 +96,13 @@ public class BlockGame extends JFrame {
         }
 
         if (ballY >= HEIGHT) {
-            remainingBalls--; // 볼이 아래로 떨어져서 플레이 횟수 감소
+        	// 볼이 아래로 떨어져서 플레이 횟수 감소
+            remainingBalls--;
+            // 남은 플레이 횟수가 있으면 게임을 초기화하고 다시 시작
             if (remainingBalls > 0) {
-                // 남은 플레이 횟수가 있으면 게임을 초기화하고 다시 시작
+            	//화면 아래로 벗어난 경우, 공의 위치를 화면 정중앙으로 재설정
+            	//ball의 X 좌표를 width 값의 반 - ball 사이즈 값의 반으로 지정함
+            	//Y 좌표 또한 동일하게 수정
                 ballX = WIDTH / 2 - BALL_SIZE / 2;
                 ballY = HEIGHT / 2 - BALL_SIZE / 2;
                 ballSpeedX = 3;
