@@ -35,6 +35,8 @@ public class BlockGame extends JFrame {
 
     private static final int MAX_BALLS = 3;
     private int remainingBalls = MAX_BALLS;
+    
+    private JButton restartButton;
 
     public BlockGame() {
         setTitle("Block Breaker Game");
@@ -67,6 +69,17 @@ public class BlockGame extends JFrame {
             }
         });
 
+        restartButton = new JButton("재시작"); //재시작 버튼 생성
+        restartButton.setBounds(WIDTH / 2 - 50, HEIGHT / 2 - 15, 100, 30);
+        restartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restart();
+            }
+        });
+        restartButton.setVisible(false);
+        add(restartButton);
+        
         bricks = new boolean[NUM_BRICKS];
         for (int i = 0; i < NUM_BRICKS; i++) {
             bricks[i] = true;
@@ -81,7 +94,22 @@ public class BlockGame extends JFrame {
         });
         timer.start();
     }
+    
+    private void restart() { //RESTART 버튼을 눌렀을 때 
+        remainingBalls = MAX_BALLS;
+        ballX = WIDTH / 2 - BALL_SIZE / 2;
+        ballY = HEIGHT / 2 - BALL_SIZE / 2;
+        ballSpeedX = 3;
+        ballSpeedY = -3;
 
+        for (int i = 0; i < NUM_BRICKS; i++) {
+            bricks[i] = true;
+        }
+
+        restartButton.setVisible(false);
+    }
+
+    
     private void update() {
         if (leftKeyPressed && paddleX > 0) {
             paddleX -= 5;
@@ -113,9 +141,8 @@ public class BlockGame extends JFrame {
                 ballSpeedX = 3;
                 ballSpeedY = -3;
             } else {
-                // 남은 플레이 횟수가 없으면 게임 종료
-                JOptionPane.showMessageDialog(this, "Game Over");
-                System.exit(0);
+                // 남은 플레이 횟수가 없으면 재시작 버튼
+            	showGameOverDialog();
             }
         }
         //볼이 바에 닿을 때만 반전되도록 수정
@@ -125,13 +152,51 @@ public class BlockGame extends JFrame {
         }
 
         for (int i = 0; i < NUM_BRICKS; i++) {
+            int brickX = i % BRICKS_ROW * (BRICK_WIDTH + BLOCK_GAP) + 10; // 수정된 부분
+            int brickY = i / BRICKS_ROW * (BRICK_HEIGHT + BLOCK_GAP) + 50; // 50 블록이 시작하는 Y좌표
         	if (bricks[i] && ballX + BALL_SIZE >= i * BRICK_WIDTH && ballX <= (i + 1) * BRICK_WIDTH && ballY + BALL_SIZE >= 0 && ballY <= BRICK_HEIGHT) {
                 ballSpeedY = -ballSpeedY;
                 bricks[i] = false;
             }
         }
     }
+    
+    private void showGameOverDialog() {
+        // 사용자 정의 다이얼로그 생성
+        JDialog dialog = new JDialog(this, "게임 오버", true);
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(this);
 
+        JLabel messageLabel = new JLabel("게임이 종료되었습니다.");
+        messageLabel.setHorizontalAlignment(JLabel.CENTER);
+        dialog.add(messageLabel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        JButton okButton = new JButton("OK");
+        JButton restartButton = new JButton("RESTART");
+
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        restartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restart();
+                dialog.dispose(); // 다이얼로그 닫기
+            }
+        });
+
+        buttonPanel.add(okButton);
+        buttonPanel.add(restartButton);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
+    }
+    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
